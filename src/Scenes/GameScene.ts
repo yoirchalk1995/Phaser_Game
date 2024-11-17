@@ -9,8 +9,9 @@ export default class GameScene extends Phaser.Scene {
   private scoreText!: Phaser.GameObjects.Text;
   private spaceKey?: Phaser.Input.Keyboard.Key;
   private bgAudio? : Phaser.Sound.HTML5AudioSound |Sound.NoAudioSound|Sound.WebAudioSound
-  private crashAudio? : Phaser.Sound.HTML5AudioSound |Sound.NoAudioSound|Sound.WebAudioSound
-  private catchAudio? : Phaser.Sound.HTML5AudioSound |Sound.NoAudioSound|Sound.WebAudioSound
+  private crashAudio? : Phaser.Sound.BaseSound
+  private catchAudio? : Phaser.Sound.BaseSound
+  private jumpAudio? : Phaser.Sound.BaseSound
 
   constructor() {
     super('GameScene');
@@ -54,13 +55,14 @@ export default class GameScene extends Phaser.Scene {
       this.character, this.trolleys, this.handleCollision, undefined, this
     )
 
+    //prevent duplication of bgAudio
     if(this.bgAudio && this.bgAudio.isPlaying){
       this.bgAudio.destroy()
     }
 
     this.bgAudio = this.sound.add('bgAudio',{
       loop: true,
-      volume: 0.2
+      volume: 0.009
     })
     this.bgAudio.play();
 
@@ -74,6 +76,12 @@ export default class GameScene extends Phaser.Scene {
       volume: 0.8
     })
 
+    this.jumpAudio = this.sound.add('jumpAudio',{
+      loop: false,
+      volume: 0.4,
+      rate: 2
+    })
+
 
   }
 
@@ -84,6 +92,7 @@ export default class GameScene extends Phaser.Scene {
       this.character.anims.pause();
       this.character.setFrame(1);
       this.character.setVelocityY(-245)
+      this.jumpAudio?.play()
     }
     if (this.character.body?.bottom === 300 && !this.spaceKey?.isDown) {
       this.character.anims.play("character_anim", true);

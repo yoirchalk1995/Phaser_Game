@@ -22,19 +22,25 @@ export default class WelcomeScene extends Phaser.Scene{
 
     this.add.rectangle(0,0,gameWidth,gameHeight,0x000000, 0.5).setOrigin(0).setFillStyle(0xcccccc, 0.5)
 
+    this.add.text(gameWidth/2, gameHeight/2 -90, 'SHABBOS SHOPPING', {
+      fontSize: '34px',
+      color: '0x000000',
+      fontStyle: 'bold'
+    }).setOrigin(0.5)
+
     this.add.text(gameWidth/2, gameHeight/2 -30, 'Catch full troleys to gain points.', {
       fontSize: '20px',
       color: '0x000000',
       fontStyle: 'bold'
     }).setOrigin(0.5)
 
-    this.add.text(gameWidth/2, gameHeight/2, 'avoid empty trolleys at all costs.', {
+    this.add.text(gameWidth/2, gameHeight/2, 'Avoid empty trolleys at all costs.', {
       fontSize: '20px',
       color: '0x000000',
       fontStyle: 'bold'
     }).setOrigin(0.5)
 
-    this.add.text(gameWidth/2, gameHeight/2 +45, 'press space to jump and to start.', {
+    this.add.text(gameWidth/2, gameHeight/2 +45, 'Press space to jump and to start.', {
       fontSize: '20px',
       color: '0x000000',
       fontStyle: 'bold'
