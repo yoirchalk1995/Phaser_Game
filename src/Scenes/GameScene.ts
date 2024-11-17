@@ -54,6 +54,10 @@ export default class GameScene extends Phaser.Scene {
       this.character, this.trolleys, this.handleCollision, undefined, this
     )
 
+    if(this.bgAudio && this.bgAudio.isPlaying){
+      this.bgAudio.destroy()
+    }
+
     this.bgAudio = this.sound.add('bgAudio',{
       loop: true,
       volume: 0.2
@@ -104,6 +108,7 @@ export default class GameScene extends Phaser.Scene {
       if (trolly.body?.right < 0) {
         if(trolly.texture.key == 'empty-trolly'){
           this.score +=1
+          this.scoreText.setText(`Score: ${this.score}`);
         }
         this.removeTrollyFromArray(trolly);
         trolly.destroy();
