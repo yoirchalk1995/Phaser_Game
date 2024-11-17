@@ -1,0 +1,27 @@
+the code will always return the first value to trigger the logic
+truthy and falsy values will be returned and not be parsed to Boolean
+therefor
+
+userColorChoice  = 'red'
+standardColor = 'green'
+
+userColorChoice || standardColor
+returns
+red
+
+userColorChoice = ''
+userColorChoice || standardColor
+returns
+green
+
+list = [1,2,3]
+
+list&&<h1>List isn't empty</h1>
+returns
+<h1>List isn't empty</h1>
+b/c that is the value that caused the logic to return
+
+Bitwise operations
+
+& - single ampre - returns a 1 if both bits are one
+| - single bar - returns 1 if either bit is one
