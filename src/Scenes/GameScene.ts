@@ -145,7 +145,7 @@ export default class GameScene extends Phaser.Scene {
         });
         this.scoreText.setText(`Score: ${this.score}`);
       } else if (trolly.texture.key === 'empty-trolly') {
-        this.scene.start('GameOver');
+        this.scene.start('HighScoreScene');
         this.registry.set('score', this.score);
         this.crashAudio?.play()
         this.score = 0;
