@@ -20,7 +20,7 @@ export default class HighScoreScene extends Phaser.Scene{
   }
 
   preload(){
-    this.load.json('topScores', '../data/highScore.json')
+    this.load.json('topScores', '/data/HighScore.json')
   }
 
   create(){
