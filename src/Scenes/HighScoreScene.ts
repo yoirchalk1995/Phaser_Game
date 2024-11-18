@@ -12,6 +12,8 @@ export default class HighScoreScene extends Phaser.Scene{
   isHighScore!: boolean
   index = 0;
   private spaceKey?: Phaser.Input.Keyboard.Key;
+  gameWidth = 600;
+  gameHeight = 300;
 
   constructor(){
     super("HighScoreScene")
@@ -24,16 +26,15 @@ export default class HighScoreScene extends Phaser.Scene{
   create(){
     const imageWidth = 1060;
     const imageHeight = 951;
-    const gameWidth = 600;
-    const gameHeight = 300;
+    
     const aspectRatio = imageWidth / imageHeight;
-    const newHeight = gameWidth / aspectRatio;
+    const newHeight = this.gameWidth / aspectRatio;
 
     this.background = this.add.tileSprite(0, 0, imageWidth, imageHeight, 'background');
     this.background.setOrigin(0, 0);
-    this.background.setDisplaySize(gameWidth, newHeight);
+    this.background.setDisplaySize(this.gameWidth, newHeight);
 
-    this.add.rectangle(0,0,gameWidth,gameHeight,0x000000, 0.5).setOrigin(0).setFillStyle(0xcccccc, 0.5)
+    this.add.rectangle(0,0,this.gameWidth,this.gameHeight,0x000000, 0.5).setOrigin(0).setFillStyle(0xcccccc, 0.5)
 
     this.score = this.registry.get('score')    
     const topScores = this.cache.json.get('topScores').topScores;
@@ -59,8 +60,9 @@ export default class HighScoreScene extends Phaser.Scene{
    showNameInput(score: number, i: number){
     console.log('show name input called');
     
-    const inputText = this.add.dom(400, 150).createFromHTML(`
-      <div>
+    const inputText = this.add.dom(this.gameWidth/2, this.gameHeight/2).createFromHTML(`
+      <div style="text-align: center;">
+        <h1> new high score!</h1>
         <label for="name">Enter your name: </label>
         <input type="text" id="name" name="name" />
         <button id="submit">Submit</button>
@@ -86,13 +88,15 @@ export default class HighScoreScene extends Phaser.Scene{
   }
 
   displayTopScores(topScores: scoreObject[]) {
-    const topScoresText = topScores.map((score, index) => {
+    const sortedTopScores = topScores.sort((a, b) => b.score - a.score);
+    const topScoresText = sortedTopScores.map((score, index) => {
       return `${index + 1}. ${score.name}: ${score.score}`;
     }).join('\n');
   
-    const textStyle = { font: '32px Arial', fill: '#fff' };
-    this.add.text(100, 100, 'Top Scores:', textStyle);
-    this.add.text(100, 150, topScoresText, textStyle);
+    const textStyle = { font: '32px Arial', fill: '#000000' };
+    this.add.text(this.gameWidth/2-25, 75, 'Top Scores:', textStyle).setOrigin(0.5);
+    this.add.text(this.gameWidth/2, 150, topScoresText, textStyle).setOrigin(0.5);
+    this.add.text(this.gameWidth/2,this.gameHeight/2 + 100,"press space to continue", textStyle).setOrigin(0.5)
   }
 
   update(){

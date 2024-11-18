@@ -33,14 +33,14 @@ export default class GameScene extends Phaser.Scene {
 
     this.character.setBodySize(375,495).setOffset(0,150)
 
-    //if(!this.anims.exists('character_anim')){
+    if(!this.anims.exists('character_anim')){
       this.anims.create({
         key: "character_anim",
         frames: this.anims.generateFrameNumbers("guy"),
         frameRate: 15,
         repeat: -1
       });
-   // }
+    }
 
     this.character.play('character_anim');
 
