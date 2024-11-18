@@ -37,8 +37,11 @@ export default class GameOver extends Phaser.Scene{
   }
 
   update(){
-    if(this.spaceKey?.isDown){
-      this.scene.start('GameScene')
-    }
+    this.time.delayedCall(1000, ()=>{
+      if(this.spaceKey?.isDown){
+        this.scene.start('GameScene')
+      }
+    })
+    
   }
 }

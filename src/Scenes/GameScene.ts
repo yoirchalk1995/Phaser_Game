@@ -123,8 +123,6 @@ export default class GameScene extends Phaser.Scene {
         trolly.destroy();
       }
     });
-  
-    console.log(this.trolleys.length);
   }
   
   handleCollision(character: any, trolly: any) {
