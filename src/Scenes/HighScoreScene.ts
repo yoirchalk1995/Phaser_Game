@@ -8,6 +8,9 @@ interface scoreObject{
 export default class HighScoreScene extends Phaser.Scene{
   score!: number;
   userName!: string  
+  isHighScore!: boolean
+  index = 0;
+  private spaceKey?: Phaser.Input.Keyboard.Key;
 
   constructor(){
     super("HighScoreScene")
@@ -18,19 +21,30 @@ export default class HighScoreScene extends Phaser.Scene{
   }
 
   create(){
-    this.score = this.registry.get('score')
+    this.score = this.registry.get('score')    
     const topScores = this.cache.json.get('topScores').topScores;
-    
-    for(let i =0; i<3; i++ ){
-      if(this.score > topScores[i].score){
-        //this.showNameInput(this.score, i)
-        console.log(i)
-        return;
+    let isNewHighScore = false;
+    for (let i = 0; i < topScores.length; i++) {
+      if (this.score > topScores[i].score) {
+        this.index = i;
+        isNewHighScore = true;
+        break; // Exit the loop once the index is found
       }
     }
+  
+    if (isNewHighScore) {
+      this.showNameInput(this.score, this.index);
+    } else {
+      this.displayTopScores(topScores);
+    }
+
+    this.spaceKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
+
   }
 
    showNameInput(score: number, i: number){
+    console.log('show name input called');
+    
     const inputText = this.add.dom(400, 150).createFromHTML(`
       <div>
         <label for="name">Enter your name: </label>
@@ -65,6 +79,15 @@ export default class HighScoreScene extends Phaser.Scene{
     const textStyle = { font: '32px Arial', fill: '#fff' };
     this.add.text(100, 100, 'Top Scores:', textStyle);
     this.add.text(100, 150, topScoresText, textStyle);
+  }
+
+  update(){
+    this.time.delayedCall(1000, ()=>{
+      if(this.spaceKey?.isDown){
+        this.scene.start('GameOver')
+      }
+    })
+    
   }
   
 }
