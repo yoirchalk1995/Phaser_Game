@@ -6,6 +6,7 @@ interface scoreObject{
 }
 
 export default class HighScoreScene extends Phaser.Scene{
+  private background!: Phaser.GameObjects.TileSprite;
   score!: number;
   userName!: string  
   isHighScore!: boolean
@@ -21,6 +22,19 @@ export default class HighScoreScene extends Phaser.Scene{
   }
 
   create(){
+    const imageWidth = 1060;
+    const imageHeight = 951;
+    const gameWidth = 600;
+    const gameHeight = 300;
+    const aspectRatio = imageWidth / imageHeight;
+    const newHeight = gameWidth / aspectRatio;
+
+    this.background = this.add.tileSprite(0, 0, imageWidth, imageHeight, 'background');
+    this.background.setOrigin(0, 0);
+    this.background.setDisplaySize(gameWidth, newHeight);
+
+    this.add.rectangle(0,0,gameWidth,gameHeight,0x000000, 0.5).setOrigin(0).setFillStyle(0xcccccc, 0.5)
+
     this.score = this.registry.get('score')    
     const topScores = this.cache.json.get('topScores').topScores;
     let isNewHighScore = false;
