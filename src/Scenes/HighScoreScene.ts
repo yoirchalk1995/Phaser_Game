@@ -21,12 +21,11 @@ export default class HighScoreScene extends Phaser.Scene{
   }
 
   preload() {
-    fetch('https://phaser-game-back-end.onrender.co')
+    fetch('https://phaser-game-back-end.onrender.com/highscores')
         .then((response) => response.json())
         .then((data) => {
             this.cache.json.add('topScores', data);
-            console.log(this.cache.json.get('topScores'));
-            
+            this.dataFetched = true;            
         });
   }
 
@@ -43,30 +42,10 @@ export default class HighScoreScene extends Phaser.Scene{
 
     this.add.rectangle(0,0,this.gameWidth,this.gameHeight,0x000000, 0.5).setOrigin(0).setFillStyle(0xcccccc, 0.5)    
 
-    this.time.delayedCall(1000,()=>{
-      this.score = this.registry.get('score')    
-      const topScores = this.cache.json.get('topScores').topScores;
-      let isNewHighScore = false;
-      for (let i = 0; i < topScores.length; i++) {
-        if (this.score > topScores[i].score) {
-          this.index = i;
-          isNewHighScore = true;
-          break; // Exit the loop once the index is found
-        }
-      }
-    
-      if (isNewHighScore) {
-        this.showNameInput(this.score, this.index);
-      } else {
-        this.displayTopScores(topScores);
-      }
-
-      this.spaceKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
-    })
-
+    this.spaceKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
   }
 
-   showNameInput(score: number, i: number){
+   showNameInput(score: number){
     console.log('show name input called');
     
     const inputText = this.add.dom(this.gameWidth/2, this.gameHeight/2).createFromHTML(`
@@ -89,7 +68,7 @@ export default class HighScoreScene extends Phaser.Scene{
   }
 
   addNewHighScore(name: string, score: number) {
-    fetch('https://phaser-game-back-end.onrender.co', {
+    fetch('https://phaser-game-back-end.onrender.com/highscores', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, score }),
@@ -119,6 +98,36 @@ export default class HighScoreScene extends Phaser.Scene{
       }
     })
     
+  }
+
+  checkDataLoaded(){
+    this.time.addEvent({
+      delay: 100,
+      callback: ()=>{
+        if(this.dataFetched){
+          this.startHighScoreLogic()
+        }
+      }
+    })
+  }
+
+  startHighScoreLogic(){
+    this.score = this.registry.get('score')    
+      const topScores = this.cache.json.get('topScores').topScores;
+      let isNewHighScore = false;
+      for (let i = 0; i < topScores.length; i++) {
+        if (this.score > topScores[i].score) {
+          this.index = i;
+          isNewHighScore = true;
+          break; // Exit the loop once the index is found
+        }
+      }
+    
+      if (isNewHighScore) {
+        this.showNameInput(this.score);
+      } else {
+        this.displayTopScores(topScores);
+      }
   }
   
 }
