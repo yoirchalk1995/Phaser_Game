@@ -46,7 +46,6 @@ export default class HighScoreScene extends Phaser.Scene{
   }
 
    showNameInput(score: number){
-    console.log('show name input called');
     
     const inputText = this.add.dom(this.gameWidth/2, this.gameHeight/2).createFromHTML(`
       <div style="text-align: center;">
