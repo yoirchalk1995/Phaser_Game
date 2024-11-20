@@ -20,16 +20,16 @@ export default class HighScoreScene extends Phaser.Scene{
     super("HighScoreScene")
   }
 
-  preload() {
-    fetch('https://phaser-game-back-end.onrender.com/highscores')
-        .then((response) => response.json())
-        .then((data) => {
-            this.cache.json.add('topScores', data);
-            this.dataFetched = true;            
-        });
-  }
-
   create(){
+    fetch('https://phaser-game-back-end.onrender.com/highscores')
+    .then((response) => response.json())
+    .then((data) => {
+      this.cache.json.add('topScores', data);
+      this.dataFetched = true;
+      this.startHighScoreLogic(); // Start directly after data is fetched
+    })
+    .catch((error) => console.error('Error fetching high scores:', error));
+
     const imageWidth = 1060;
     const imageHeight = 951;
     
@@ -100,15 +100,16 @@ export default class HighScoreScene extends Phaser.Scene{
     
   }
 
-  checkDataLoaded(){
+  checkDataLoaded() {
     this.time.addEvent({
       delay: 100,
-      callback: ()=>{
-        if(this.dataFetched){
-          this.startHighScoreLogic()
-        }
-      }
-    })
+      callback: () => {
+        if (this.dataFetched) {
+          this.startHighScoreLogic();
+          return;
+        } 
+      },
+    });
   }
 
   startHighScoreLogic(){
